@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
  Copyright 2016 The TensorFlow Authors. All Rights Reserved.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,10 +14,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#000"
-    tools:context="org.tensorflow.demo.CameraActivity" />
+
+<resources>
+    <string name="app_name">Rock Paper Scissors TF</string>
+    <string name="activity_name_classification">RPS TF Classify</string>
+    <string name="activity_name_detection">RPS TF Detect</string>
+    <string name="activity_name_stylize">RPS TF Stylize</string>
+</resources>
