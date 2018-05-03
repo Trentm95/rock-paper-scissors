@@ -19,7 +19,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.tensorflow.demo.CameraActivity">
+    tools:context="org.tensorflow.demo.ClassifierActivity">
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -67,6 +67,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:backgroundTint="@color/colorPrimaryDark"
+        android:onClick="shoot"
         android:text="Shoot!"
         android:textColor="?android:attr/windowBackground"
         android:textSize="24sp"

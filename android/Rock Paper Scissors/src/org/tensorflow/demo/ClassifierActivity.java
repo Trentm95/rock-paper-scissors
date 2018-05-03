@@ -16,6 +16,7 @@
 
 package org.tensorflow.demo;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -31,6 +32,8 @@ import android.os.Trace;
 import android.util.Size;
 import android.util.TypedValue;
 import android.view.Display;
+import android.view.View;
+
 import java.util.List;
 import java.util.Vector;
 import org.tensorflow.demo.OverlayView.DrawCallback;
@@ -41,31 +44,6 @@ import org.tensorflow.demo.R;
 
 public class ClassifierActivity extends CameraActivity implements OnImageAvailableListener {
   private static final Logger LOGGER = new Logger();
-
-  // These are the settings for the original v1 Inception model. If you want to
-  // use a model that's been produced from the TensorFlow for Poets codelab,
-  // you'll need to set IMAGE_SIZE = 299, IMAGE_MEAN = 128, IMAGE_STD = 128,
-  // INPUT_NAME = "Mul", and OUTPUT_NAME = "final_result".
-  // You'll also need to update the MODEL_FILE and LABEL_FILE paths to point to
-  // the ones you produced.
-  //
-  // To use v3 Inception model, strip the DecodeJpeg Op from your retrained
-  // model first:
-  //
-  // python strip_unused.py \
-  // --input_graph=<retrained-pb-file> \
-  // --output_graph=<your-stripped-pb-file> \
-  // --input_node_names="Mul" \
-  // --output_node_names="final_result" \
-  // --input_binary=true
-
-  /* Inception V3
-  private static final int INPUT_SIZE = 299;
-  private static final int IMAGE_MEAN = 128;
-  private static final float IMAGE_STD = 128.0f;
-  private static final String INPUT_NAME = "Mul:0";
-  private static final String OUTPUT_NAME = "final_result";
-  */
 
   private static final int INPUT_SIZE = 224;
   private static final int IMAGE_MEAN = 128;
@@ -105,6 +83,15 @@ public class ClassifierActivity extends CameraActivity implements OnImageAvailab
   private BorderedText borderedText;
 
   private long lastProcessingTimeMs;
+
+  // Additions
+
+  private List<Classifier.Recognition> results;
+
+  public void shoot(View v){
+    Intent shootIntent = new Intent(this, activity_result.class);
+    startActivity(shootIntent);
+  }
 
   @Override
   protected int getLayoutId() {
@@ -233,7 +220,7 @@ public class ClassifierActivity extends CameraActivity implements OnImageAvailab
           @Override
           public void run() {
             final long startTime = SystemClock.uptimeMillis();
-            final List<Classifier.Recognition> results = classifier.recognizeImage(croppedBitmap);
+            results = classifier.recognizeImage(croppedBitmap);
             lastProcessingTimeMs = SystemClock.uptimeMillis() - startTime;
 
             cropCopyBitmap = Bitmap.createBitmap(croppedBitmap);
