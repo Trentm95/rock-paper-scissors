@@ -32,8 +32,11 @@ import android.os.Trace;
 import android.util.Size;
 import android.util.TypedValue;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 import org.tensorflow.demo.OverlayView.DrawCallback;
@@ -153,12 +156,12 @@ public class ClassifierActivity extends CameraActivity implements OnImageAvailab
 
     addCallback(
         new DrawCallback() {
-          @Override
-          public void drawCallback(final Canvas canvas) {
-            renderDebug(canvas);
-          }
-        });
-  }
+    @Override
+    public void drawCallback(final Canvas canvas) {
+      // renderDebug(canvas);
+    }
+  });
+}
 
   @Override
   public void onImageAvailable(final ImageReader reader) {
@@ -224,7 +227,15 @@ public class ClassifierActivity extends CameraActivity implements OnImageAvailab
             lastProcessingTimeMs = SystemClock.uptimeMillis() - startTime;
 
             cropCopyBitmap = Bitmap.createBitmap(croppedBitmap);
-            resultsView.setResults(results);
+
+            // Toggle Results in Camera on debug
+            if(isDebug()){
+              resultsView.setResults(results);
+            }
+            else{
+              resultsView.setResults(Collections.<Classifier.Recognition>emptyList());
+            }
+
             requestRender();
             computing = false;
           }
