@@ -33,8 +33,8 @@ public class activity_result extends Activity {
         appChoice = (TextView) findViewById(R.id.appChoice);
         playerChoice = (TextView) findViewById(R.id.playerChoice);
         winner = (TextView) findViewById(R.id.winner);
-        playerImage = (ImageView) findViewById(R.id.appImage);
-        appImage = (ImageView) findViewById(R.id.playerImage);
+        playerImage = (ImageView) findViewById(R.id.playerImage);
+        appImage = (ImageView) findViewById(R.id.appImage);
 
         // Set Confidence values from intent
         rockConf = getIntent().getFloatExtra("R",0);
