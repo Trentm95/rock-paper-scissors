@@ -84,7 +84,6 @@
       <excludeFolder url="file://$MODULE_DIR$/gradleBuild/intermediates/assets" />
       <excludeFolder url="file://$MODULE_DIR$/gradleBuild/intermediates/blame" />
       <excludeFolder url="file://$MODULE_DIR$/gradleBuild/intermediates/build-info" />
-      <excludeFolder url="file://$MODULE_DIR$/gradleBuild/intermediates/builds" />
       <excludeFolder url="file://$MODULE_DIR$/gradleBuild/intermediates/check-manifest" />
       <excludeFolder url="file://$MODULE_DIR$/gradleBuild/intermediates/classes" />
       <excludeFolder url="file://$MODULE_DIR$/gradleBuild/intermediates/incremental" />
