@@ -89,10 +89,17 @@ public class ClassifierActivity extends CameraActivity implements OnImageAvailab
 
   // Additions
 
+  private float rockConf;
+  private float paperConf;
+  private float scissorConf;
+
   private List<Classifier.Recognition> results;
 
   public void shoot(View v){
     Intent shootIntent = new Intent(this, activity_result.class);
+    shootIntent.putExtra("R", rockConf);
+    shootIntent.putExtra("P", paperConf);
+    shootIntent.putExtra("S", scissorConf);
     startActivity(shootIntent);
   }
 
@@ -234,6 +241,26 @@ public class ClassifierActivity extends CameraActivity implements OnImageAvailab
             }
             else{
               resultsView.setResults(Collections.<Classifier.Recognition>emptyList());
+            }
+
+            //Reset Values
+            rockConf = 0;
+            paperConf = 0;
+            scissorConf = 0;
+
+            //Assign New Values
+            for (final Classifier.Recognition recog : results) {
+              switch (recog.getTitle()){
+                case "rock":
+                  rockConf = recog.getConfidence();
+                  break;
+                case "paper":
+                  paperConf = recog.getConfidence();
+                  break;
+                case "scissors":
+                  scissorConf = recog.getConfidence();
+                  break;
+              }
             }
 
             requestRender();
