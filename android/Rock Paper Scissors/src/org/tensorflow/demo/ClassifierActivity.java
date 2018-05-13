@@ -160,14 +160,6 @@ public class ClassifierActivity extends CameraActivity implements OnImageAvailab
     frameToCropTransform.invert(cropToFrameTransform);
 
     yuvBytes = new byte[3][];
-
-    addCallback(
-        new DrawCallback() {
-    @Override
-    public void drawCallback(final Canvas canvas) {
-      // renderDebug(canvas);
-    }
-  });
 }
 
   @Override
@@ -274,38 +266,5 @@ public class ClassifierActivity extends CameraActivity implements OnImageAvailab
   @Override
   public void onSetDebug(boolean debug) {
     classifier.enableStatLogging(debug);
-  }
-
-  private void renderDebug(final Canvas canvas) {
-    if (!isDebug()) {
-      return;
-    }
-    final Bitmap copy = cropCopyBitmap;
-    if (copy != null) {
-      final Matrix matrix = new Matrix();
-      final float scaleFactor = 2;
-      matrix.postScale(scaleFactor, scaleFactor);
-      matrix.postTranslate(
-          canvas.getWidth() - copy.getWidth() * scaleFactor,
-          canvas.getHeight() - copy.getHeight() * scaleFactor);
-      canvas.drawBitmap(copy, matrix, new Paint());
-
-      final Vector<String> lines = new Vector<String>();
-      if (classifier != null) {
-        String statString = classifier.getStatString();
-        String[] statLines = statString.split("\n");
-        for (String line : statLines) {
-          lines.add(line);
-        }
-      }
-
-      lines.add("Frame: " + previewWidth + "x" + previewHeight);
-      lines.add("Crop: " + copy.getWidth() + "x" + copy.getHeight());
-      lines.add("View: " + canvas.getWidth() + "x" + canvas.getHeight());
-      lines.add("Rotation: " + sensorOrientation);
-      lines.add("Inference time: " + lastProcessingTimeMs + "ms");
-
-      borderedText.drawLines(canvas, 10, canvas.getHeight() - 10, lines);
-    }
   }
 }

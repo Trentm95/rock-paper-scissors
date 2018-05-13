@@ -2,7 +2,9 @@ package org.tensorflow.demo;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -41,8 +43,29 @@ public class activity_result extends Activity {
         paperConf = getIntent().getFloatExtra("P",0);
         scissorConf = getIntent().getFloatExtra("S",0);
 
+        // Shared prefs
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        // Pull weights
+        int rockWeight = preferences.getInt("rock", 0);
+        int paperWeight = preferences.getInt("paper", 0);
+        int scissorWeight = preferences.getInt("scissor", 0);
+        int sumWeight = rockWeight + paperWeight + scissorWeight;
+
+        // Use weights only if 12 user choices have been recorded.
+        int pick;
+        if(sumWeight >= 12){
+            int rockPercent = (int)((rockWeight / (double)sumWeight)*100);
+            int paperPercent = (int)((paperWeight / (double)sumWeight)*100);
+            pick = getPick(rockPercent,paperPercent);
+        }
+        else {
+            Random rand = new Random();
+            pick = rand.nextInt(2);
+        }
+
         // Have app choose
-        switch (getPick()){
+        switch (pick){
             case 0:
                 appSelection ='R';
                 appChoice.setText("I chose Rock.");
@@ -65,21 +88,25 @@ public class activity_result extends Activity {
             playerSelection = 'R';
             playerChoice.setText("You chose Rock.");
             playerImage.setImageResource(R.drawable.rock);
+            editor.putInt("rock", rockWeight + 1);
         }
         else if (paperConf > 0.51){
             playerSelection = 'P';
             playerChoice.setText("You chose Paper.");
             playerImage.setImageResource(R.drawable.paper);
+            editor.putInt("paper", paperWeight + 1);
         }
         else if(scissorConf > 0.51){
             playerSelection = 'S';
             playerChoice.setText("You chose Scissors.");
             playerImage.setImageResource(R.drawable.scissors);
+            editor.putInt("scissor", scissorWeight + 1);
         }
         else {
             playerSelection = 'X';
             playerChoice.setText("Couldn't Recognize Your Choice");
         }
+        editor.apply();
 
         winner.setText(getWinner());
 
@@ -90,9 +117,21 @@ public class activity_result extends Activity {
         startActivity(rematchIntent);
     }
 
-    protected int getPick(){
+    // Percent of previous selections determines range that maps to rock, paper, or scissor.
+    // For example if you pick rock 90% of the time a random from 1-90 will select paper.
+    protected int getPick(int rp, int pp){
         Random rand = new Random();
-        return rand.nextInt(2);
+        int rnd = rand.nextInt(100) + 1;
+
+        if(rnd <= rp){
+            return 1;
+        }
+        else if(rnd <= (rp + pp)){
+            return 2;
+        }
+        else {
+            return 0;
+        }
     }
 
     protected String getWinner(){
